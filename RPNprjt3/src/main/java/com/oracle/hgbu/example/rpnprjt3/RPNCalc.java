@@ -16,47 +16,65 @@ public class RPNCalc {
         String expression;
         Scanner myScan = new Scanner(System.in);
         System.out.println("Enter a Reverse Polish Notation Expression: ");
+        //Take Input
         expression = myScan.nextLine();
-        if(expression.length() == 0){
-            throw new EmptyStackException("Invalid Input, no arguements");
+        //Check if equation contains only numbers
+        if(expression.matches("[a-zA-Z]+")){
+            throw new InvalidRPNString("Cannot process words, only numbers");
         }
-        String [] input;
-        
-        input = expression.split(" ");
-        
+        //Place string in a string array for calculation
+        String [] input = {};
+        try{
+            input = expression.split(" ");
+        }
+        catch (InvalidRPNString e){
+            System.out.println("Input cannot be spliced, check for valid input");
+        }
+        if(input.length < 3){
+            throw new InvalidRPNString("Invalid Number of Arguements, check for three arguements. Ex. '3 3 +'");
+        }
+
         return input;
+
     }
     public static double calculateRPN(String[] expression) {
         
         Stack<String> stck = new Stack<String>();
  
         double returnValue = 0;
+        double num1 = 0;
+        double num2 = 0;
  
         String operators = "+-*/";
  
         for(String i : expression){
+            //push number to stack
             if(!operators.contains(i)){
                 stck.push(i);
             }
+            //preform calculation if operator is found
             else{
-                if(stck.isEmpty() || stck.size() == 1){
-                    throw new EmptyStackException("Can't pop values, Improper Arguement Size");
+                try{
+                    num1 = Double.valueOf(stck.pop());
+                    num2 = Double.valueOf(stck.pop());
                 }
-                double num1 = Double.valueOf(stck.pop());
-                double num2 = Double.valueOf(stck.pop());
-                switch(operators.indexOf(i)){
-                    case 0:
+                catch(InvalidRPNString e){
+                    System.out.println("Can't pop values, stack is empty or values are not doubles");
+                    return 0;                   
+                }
+                switch(i){
+                    case "+":
                         stck.push(String.valueOf(num1 + num2));
                         break;
-                    case 1:
+                    case "-":
                         stck.push(String.valueOf(num2 - num1));
                         break;
-                    case 2:
+                    case "*":
                         stck.push(String.valueOf(num1 * num2));
                         break;
-                    case 3:
+                    case "/":
                         if(num1 == 0){
-                            throw new DividebyZeroException("Improper Arithmetic, Divide by zero");
+                            throw new InvalidRPNString("Improper Arithmetic, Divide by zero");
                         }
                         stck.push(String.valueOf(num2 / num1));
                         break;

@@ -14,7 +14,7 @@ import static com.oracle.hgbu.example.rpnprjt3.RPNCalc.getInput;
  */
 public class main {
     public static void main(String[] args){
-        //String[] input = new String[] {"23.3", "5", "16.2", "+", "8", "*", "-" ""};
+        //take input, calculate, and print answer
         System.out.println(calculateRPN(getInput()));
     }
 }

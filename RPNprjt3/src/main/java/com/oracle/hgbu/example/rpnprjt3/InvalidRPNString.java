@@ -9,8 +9,8 @@ package com.oracle.hgbu.example.rpnprjt3;
  *
  * @author JW
  */
-public class DividebyZeroException extends ArithmeticException {
-    public DividebyZeroException(String err){
+public class InvalidRPNString extends RuntimeException{
+    public InvalidRPNString(String err){
         super(err);
-    }    
+    }
 }
